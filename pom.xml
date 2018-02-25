@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>br.com.bb.gaw</groupId>
+	<artifactId>angularjs_dia3</artifactId>
+	<version>1.0.0</version>
+	<packaging>war</packaging>
+	<name>${project.artifactId}</name>
+	<description>Projeto web para cadastro de clientes.</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8
+		</project.reporting.outputEncoding>
+	</properties>
+
+<!-- 	<pluginRepositories> -->
+<!-- 		<pluginRepository> -->
+<!-- 			<name>oss.sonatype.org</name> -->
+<!-- 			<id>oss.sonatype.org</id> -->
+<!-- 			<url>http://oss.sonatype.org/content/groups/public</url> -->
+<!-- 		</pluginRepository> -->
+<!-- 	</pluginRepositories> -->
+
+	<dependencies>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>7.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.9.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.3.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-json</artifactId>
+			<version>1.8</version>
+		</dependency>
+
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<!-- Modo Build Completo -->
+				<skipYuicompressor>false</skipYuicompressor>
+				<failOnJSHintError>true</failOnJSHintError>
+				<skipKarmaTests>false</skipKarmaTests>
+			</properties>
+		</profile>
+		<profile>
+			<id>fastBuild</id>
+			<properties>
+				<!-- Modo Desenvolvimento com Build Rápido -->
+				<skipYuicompressor>true</skipYuicompressor>
+				<failOnJSHintError>false</failOnJSHintError>
+				<skipKarmaTests>true</skipKarmaTests>
+			</properties>
+		</profile>
+	</profiles>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.6.1</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>karma-reports</directory>
+							<includes>
+								<include>**/*</include>
+							</includes>
+							<excludes>
+								<exclude>**/.gitignore</exclude>
+							</excludes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+			<!-- jshint -->
+			<plugin>
+				<groupId>com.cj.jshintmojo</groupId>
+				<artifactId>jshint-maven-plugin</artifactId>
+				<version>1.6.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>lint</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<version>2.4.3</version>
+					<options>
+						bitwise:true,
+						camelcase:true,
+						es3:false:true,
+						curly:true,
+						eqeqeq:true,
+						forin:true,
+						immed:true,
+						indent:4,
+						latedef:nofunc,
+						maxcomplexity:8,
+						maxdepth:5,
+						maxparams:10,
+						maxstatements:40,
+						maxlen:120,
+						newcap:true,
+						noarg:true,
+						noempty:true,
+						nonbsp:true,
+						nonew:true,
+						plusplus:true,
+						quotmark:single,
+						strict:true,
+						undef:true,
+						unused:true,
+						
+						asi:false,
+    					boss:false,
+    					debug:false,
+					    eqnull: true,
+    					esnext:false,
+    					evil:false,
+    					expr:false,
+    					funcscope:false,
+    					globalstrict:false,
+					    iterator:false,
+    					lastsemic:false,
+    					laxbreak:false,
+    					laxcomma:false,
+    					loopfunc: true,
+    					maxerr:false,
+    					moz:false,
+    					multistr:false,
+    					notypeof:false,
+    					noyield:false,
+    					proto:false,
+    					scripturl:false,
+    					shadow:false,
+    					sub: true,
+    					supernew:false,
+    					validthis:false,
+
+    					browser:true,
+    					node:true
+					</options>
+					<globals>$,angular,console</globals>
+					<directories>
+						<directory>src/main/webapp/app/spas</directory>
+					</directories>
+					<reporter>jslint</reporter>
+					<reportFile>target/jshint.xml</reportFile>
+					<failOnError>${failOnJSHintError}</failOnError>
+				</configuration>
+			</plugin>
+			<!-- Javascript and CSS files compression -->
+			<plugin>
+				<groupId>net.alchim31.maven</groupId>
+				<artifactId>yuicompressor-maven-plugin</artifactId>
+				<version>1.5.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compress</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<skip>${skipYuicompressor}</skip>
+					<excludes>
+						<!-- Exclude already minified files -->
+						<exclude>**/*-min.js</exclude>
+						<exclude>**/*.min.js</exclude>
+						<exclude>**/*-min.css</exclude>
+						<exclude>**/*.min.css</exclude>
+						<exclude>**/vendor/**/*.js</exclude>
+						<exclude>**/vendor/**/*.css</exclude>
+						<exclude>**/*-debug.js</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<!-- Testes JavaScript -->
+			<plugin>
+				<groupId>com.kelveden</groupId>
+				<artifactId>maven-karma-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<goals>
+							<goal>start</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<karmaExecutable>${basedir}/node_modules/.bin/karma</karmaExecutable>
+					<configFile>src/test/javascript/karma-ci.conf.js</configFile>
+					<junitReportFile>karma-reports/test-results.xml</junitReportFile>
+					<reportsDirectory>${project.build.directory}/karma-reports</reportsDirectory>
+					<browsers>PhantomJS</browsers>
+					<autoWatch>false</autoWatch>
+					<singleRun>true</singleRun>
+					<colors>true</colors>
+					<skipKarma>false</skipKarma>
+					<skipTests>${skipKarmaTests}</skipTests>
+					<karmaFailureIgnore>false</karmaFailureIgnore>
+					<reporters>dots,junit</reporters>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

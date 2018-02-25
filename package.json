@@ -1,0 +1,26 @@
+{
+  "name": "gawapp-ui-web",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Projeto de Referência Plataforma BB 2.5",
+  "devDependencies": {
+    "karma": "~0.10",
+    "karma-phantomjs-launcher": "0.1.2",
+    "karma-junit-reporter": "~0.2.2",
+    "protractor": "~1.0.0",
+    "http-server": "^0.6.1",
+    "shelljs": "^0.2.6",
+    "jsdoc": "<=3.3.0"
+  },
+  "scripts": {
+    "start": "http-server -p 8000",
+    "test": "karma start src/test/javascript/karma.conf.js",
+
+    "//": "Para executar os scripts abaixo, digite: npm run <script>",
+    "update-docs": "jsdoc -d docs --lenient --verbose --debug -r src/main/webapp/app",    
+    "update-webdriver": "webdriver-manager update",
+    "protractor": "protractor src/test/javascript/protractor-conf.js",
+    "test-single-run": "karma start test/karma.conf.js  --single-run",
+    "update-index-async": "node -e \"require('shelljs/global'); sed('-i', /\\/\\/@@NG_LOADER_START@@[\\s\\S]*\\/\\/@@NG_LOADER_END@@/, '//@@NG_LOADER_START@@\\n' + cat('bower_components/angular-loader/angular-loader.min.js') + '\\n//@@NG_LOADER_END@@', 'app/index-async.html');\""
+  }
+}
